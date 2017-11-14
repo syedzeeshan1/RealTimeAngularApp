@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scrum Update App</title>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"> 
+    <style>
+        body    { padding-top:30px; }
+
+        td{
+            border: 1px solid black;
+        }
+        th{
+            border: 1px solid black;
+        }
+        .table1{
+            column-width: 100px;
+        }
+
+    </style>
+
+    <script src="http://code.angularjs.org/1.2.6/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</head>
+
+<body ng-app="validationApp" ng-controller="mainController"  ng-init="list = []">
+
+<div class="container">
+<div class="col-sm-8 col-sm-offset-2">
+
+    <div class="page-header"><h1>Scrum Update App-AngularJS</h1></div>
+    <form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
+
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" ng-model="name" required ng-minlength="3" ng-maxlength="8">
+            <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">Enter Name between 3 to 8 characters.</p>
+        </div>
+        
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" ng-model="email" required>
+            <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" placeholder="+91-636-7865800" name="phone" ng-pattern="phoneNumbr" ng-model="phone" />
+            <span class="error" ng-show="userForm.phone.$error.required">Required!</span>
+            <span class="error" ng-show="userForm.phone.$error.minlength">Phone no not less that 10 char.</span>
+            <span class="error" ng-show="userForm.phone.$error.maxlength">Phone no not more than 11 char.</span>
+            <br><span class="error" ng-show="userForm.phone.$error.pattern">Please match pattern [+91-036-7865800 || 91-036-7865800]</span>
+        </div>
+        <div class="form-group">
+            <label>Project</label>
+            <select name="project" class="form-control" ng-model="project" required>
+                <option value="IIFI">IIFI</option>
+                <option value="Innovations Team">Innovations Team</option>
+                <option value="Deloitte">Deloitte</option>
+                <option value="Other">Other</option>
+            </select>
+            <p ng-show="userForm.project.$invalid && !userForm.project.$pristine" class="help-block">Can't Leave this field empty!</p>
+        </div>
+        <div class="form-group">
+            <label>What have you done yesteray?</label>
+            <input type="text" name="yesterday" class="form-control" ng-model="yesterday" required>
+            <p ng-show="userForm.yesterday.$invalid && !userForm.yesterday.$pristine" class="help-block">Can't Leave this field empty!</p>
+        </div>
+        <div class="form-group">
+            <label>What are you planning to do today?</label>
+            <input type="text" name="today" class="form-control" ng-model="today" required>
+            <p ng-show="userForm.today.$invalid && !userForm.today.$pristine" class="help-block">Can't Leave this field empty!</p>
+        </div>
+        <div class="form-group">
+            <label>Impediments, if any?</label>
+            <input type="text" name="impediments" class="form-control" ng-model="impediments">
+        </div>
+
+        <button type="submit" class="btn btn-primary" ng-click="add_update()" ng-disabled="userForm.$invalid">Add</button>
+
+    </form>
+
+</div>
+</div>
+<div id="updates">
+    <div class="page-header" id="section" >
+        <h2 class="col-sm-4">Updates</h2>
+        <div class="col-sm-4">
+            <label>Sort By Project
+                <select ng-model="search.project" class="form-control">
+                    <option selected value="IIFI">IIFI</option>
+                    <option value="Innovations Team">Innovations Team</option>
+                    <option value="Deloitte">Deloitte</option>
+                    <option value="Other">Other</option>
+                </select>
+            </label>
+        </div>
+        <div class="col-sm-4" >
+
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div id="table1">
+    <table class="col-sm-6">
+            <thead>
+                    <tr>
+                            <th>Date&Time</th><th>Project</th><th>Name</th><th>E-Mail</th><th>Phone Number</th><th>What have you completed yesterday?</th><th>What do you plan to work on today?</th><th>Impediments if any</th><th>Action</th>  
+                    </tr>
+            </thead>
+            <tbody  id="after_add">
+                <tr ng-repeat="vals in list | filter:search">
+                    <td>{{vals.date | date:'dd/MM/yyyy hh:mm:ss a'}}</td><td>{{vals.project}}</td><td>{{vals.name}}</td><td>{{vals.email}}</td><td>{{vals.phone}}</td><td>{{vals.yesterday}}</td><td>{{vals.today}}</td><td>{{vals.impediments}}</td><td><button ng-click="deleteUpdate(val)" class="btn btn-warning">Delete</button> </td>
+                </tr>
+            </tbody>
+    </table>
+</div>
+</body>
+</html>
